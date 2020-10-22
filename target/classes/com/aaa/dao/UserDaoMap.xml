@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace需要对应dao接口的完全限定名 （包名+类名）-->
+<mapper namespace="com.aaa.dao.UserDao">
+
+    <resultMap id="userMap" type="User">
+        <id column="id" property="id"></id>
+        <result column="userCode" property="userCode"></result>
+        <result column="userName" property="userName"></result>
+        <result column="userPassword" property="userPassword"></result>
+        <result column="birthday" property="birthday"></result>
+        <result column="roleName" property="UserRoleName"></result>
+        <result column="phone" property="phone"></result>
+        <result column="address" property="address"></result>
+        <result column="userRole" property="userRole"></result>
+
+    </resultMap>
+    <resultMap id="roleMap" type="Role">
+        <id column="rid" property="id"></id>
+        <result column="roleName" property="roleName"></result>
+    </resultMap>
+   <select id="findByNameRole" resultMap="userMap" parameterType="User">
+         select u.id,u.userCode,u.userName,u.userPassword,u.birthday,u.phone,u.address,u.userRole from smbms_user u
+    <where>
+        <if test="userName!=null">
+            and u.userName like concat('%',#{userName},'%')
+        </if>
+        <if test="userRole!=null and userRole!=''">
+            and userRole=#{userRole}
+        </if>
+    </where>
+   </select>
+    <!--
+    prefix:加的前缀
+    prefixOverrides：符合条件进行重写
+    suffix
+    suffixOverrides
+    -->
+    <select id="findByNameRoleTwo" resultMap="userMap" parameterType="User">
+        select u.id,u.userCode,u.userName,u.userPassword,u.birthday,u.phone,u.address,u.userRole from smbms_user u
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="userName!=null">
+                and u.userName like concat('%',#{userName},'%')
+            </if>
+            <if test="userRole!=null and userRole!=''">
+                and userRole=#{userRole}
+            </if>
+        </trim>
+    </select>
+    <update id="update" parameterType="User">
+        update  smbms_user set
+        <trim suffix="where id = #{id}" suffixOverrides=","  >
+            <if test="userCode!=null">
+                 userCode = #{userCode},
+            </if>
+            <if test="userName!=null">
+                userName=#{userName},
+            </if>
+            <if test="address!=null">
+                address=#{address}
+            </if>
+        </trim>
+    </update>
+    <update id="updateTwo" parameterType="User">
+        update  smbms_user
+        <set>
+            <if test="userCode!=null">
+                userCode = #{userCode},
+            </if>
+            <if test="userName!=null">
+                userName=#{userName},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

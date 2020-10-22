@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置mybatis核心
+    1,下载jar
+    2，加载jar
+    3，配置xml
+    4，entity
+    5，dao
+    6，xml
+    7，测试-->
+    <!--引入数据源  有没有其他方法配置数据？-->
+    <properties resource="db.properties"/>
+    <!--db.properties:
+    driver=com.mysql.jdbc.Driver
+    url=jdbc:mysql://localhost:3306/smbms
+    username=root
+    password=123456-->
+
+    <settings>
+        <!--可以配置sql打印，可以配置缓存是否开启-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <setting name="cacheEnabled" value="false"/>
+       <!-- <setting name="logImpl" value="LOG4J"/>
+        <setting name="autoMappingBehavior" value="FULL"/>-->
+    </settings>
+    <typeAliases>
+        <!--这是什么？？？还有没有其他写法-->
+        <package name="com.aaa.entity"/>
+    </typeAliases>
+    <!--配置数据源   可以配置多套数据源吗 怎么引用？？？？-->
+    <environments default="test">
+        <environment id="development">
+
+            <transactionManager type="JDBC"></transactionManager>
+            <!--数据源连接池 有哪些？？-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+        <environment id="test">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="com/aaa/dao/UserDaoMap.xml"></mapper>
+
+    </mappers>
+
+</configuration>
